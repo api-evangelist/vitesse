@@ -1,0 +1,18 @@
+# Vitesse
+
+> Vitesse is a universal physical-AI platform for industrial machines. It connects any machine through 135 native OT connectors, generates control logic from a natural-language description of a process, and runs the full stack at the edge on purpose-built industrial controllers with no cloud required. Vitesse currently exposes a marketing website and a login-gated product application; it does not publish a public developer API, OpenAPI specification, or developer documentation.
+
+## About
+- [Website](https://vitesseautomation.com/): Company and product overview.
+- [About / Team](https://vitesseautomation.com/about): Founding team (ex-Tesla, SpaceX, Siemens, Safran) and mission.
+- [Product App](https://app.vitesse.dev): Login-gated Vitesse platform application.
+
+## Platform
+- [Hardware](https://vitesseautomation.com/hardware): Purpose-built industrial edge controllers (IP64, dual isolated networks).
+- [Interoperability](https://vitesseautomation.com/interoperability): 135 native OT connectors (Siemens, Allen-Bradley, Fanuc, KUKA, ABB, legacy PLCs).
+- [Physical AI](https://vitesseautomation.com/physical-ai): Generate PLC/control logic from a process description.
+- [Data](https://vitesseautomation.com/data): Live dashboards, camera feeds, and SCADA views in the browser.
+- [Cybersecurity](https://vitesseautomation.com/cybersecurity): Zero-trust OT/IT separation, NIS2 and NIST aligned.
+
+## Notes
+- No public API, OpenAPI/AsyncAPI specification, developer portal, or /.well-known discovery documents were found as of 2026-07-21.
