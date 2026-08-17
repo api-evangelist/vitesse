@@ -1,11 +1,22 @@
-# Vitesse
+# Vitesse (Vitesse Automation)
 
-> Vitesse is a universal physical-AI platform for industrial machines. It connects any machine through 135 native OT connectors, generates control logic from a natural-language description of a process, and runs the full stack at the edge on purpose-built industrial controllers with no cloud required. Vitesse currently exposes a marketing website and a login-gated product application; it does not publish a public developer API, OpenAPI specification, or developer documentation.
+> Vitesse is a universal physical-AI platform for industrial machines, built by Full Speed
+> Automation — the company founded by Tesla's former Head of Core Automation Engineering, which
+> renamed to Vitesse Automation after acquiring Niagara Tech. It connects any machine (Siemens,
+> Allen-Bradley, Fanuc, KUKA, ABB and legacy PLCs) through 135 native OT connectors, generates
+> control logic from a natural-language description of a process, and runs the full stack at the
+> edge on purpose-built industrial controllers with no cloud required.
+>
+> IMPORTANT FOR AGENTS: Vitesse ships software as an end-user product only. It publishes no public
+> developer API, no OpenAPI/AsyncAPI/GraphQL specification, no SDK, no webhooks, no developer
+> portal, no API reference, and no pricing page. There is nothing here to call programmatically.
+> Verified by probe on 2026-08-17 — see the Notes section for what was checked.
 
 ## About
 - [Website](https://vitesseautomation.com/): Company and product overview.
 - [About / Team](https://vitesseautomation.com/about): Founding team (ex-Tesla, SpaceX, Siemens, Safran) and mission.
-- [Product App](https://app.vitesse.dev): Login-gated Vitesse platform application.
+- [Contact](https://vitesseautomation.com/contact): Contact form — the only commercial and support entry point on the site.
+- [Videos](https://vitesseautomation.com/videos): Product demonstration videos.
 
 ## Platform
 - [Hardware](https://vitesseautomation.com/hardware): Purpose-built industrial edge controllers (IP64, dual isolated networks).
@@ -14,5 +25,25 @@
 - [Data](https://vitesseautomation.com/data): Live dashboards, camera feeds, and SCADA views in the browser.
 - [Cybersecurity](https://vitesseautomation.com/cybersecurity): Zero-trust OT/IT separation, NIS2 and NIST aligned.
 
+## Product application
+- [Vitesse App](https://app.vitesse.dev): Login-gated product application (React single-page app, Clerk identity). Not an API — every path returns the same HTML shell.
+
+## Content and crawling policy
+- [robots.txt](https://vitesseautomation.com/robots.txt): Cloudflare-managed Content-Signal directives — `search=yes, ai-train=no, use=reference` — plus an explicit `Disallow: /` for ClaudeBot, GPTBot, CCBot, Bytespider, Amazonbot, Google-Extended, Applebot-Extended and meta-externalagent. Vitesse permits search indexing and reference use, and withholds AI training. Honor this.
+- [sitemap.xml](https://vitesseautomation.com/sitemap.xml): Eight marketing URLs. No docs, API, pricing, or blog entry.
+
 ## Notes
-- No public API, OpenAPI/AsyncAPI specification, developer portal, or /.well-known discovery documents were found as of 2026-07-21.
+- No OpenAPI, Swagger, AsyncAPI, GraphQL SDL, MCP server, or A2A agent card exists on any Vitesse
+  host. Probed 2026-08-17 across vitesseautomation.com, vitesse.dev, app.vitesse.dev,
+  fleet.vitesse.dev and conversations.vitesse.dev.
+- No /.well-known/ discovery document is served on any host. `app.vitesse.dev` returns HTTP 200 for
+  every path including nonsense controls; those 200s are the SPA shell, not documents, and must not
+  be read as discovery hits.
+- Two product backend hosts exist (`fleet.vitesse.dev`, `conversations.vitesse.dev`) but are the
+  application's own services: neither publishes a specification, and conversations.vitesse.dev
+  answers 401 for every path including nonsense controls, i.e. a blanket auth wall rather than a
+  documented API.
+- The legacy brand domain fullspeedautomation.com no longer completes a TLS handshake.
+- DISAMBIGUATION: "Vitesse API" on docs.vitessepsp.com belongs to Vitesse PSP, an unrelated
+  cross-border payments provider. It is not this company and must not be attributed to Vitesse
+  Automation.

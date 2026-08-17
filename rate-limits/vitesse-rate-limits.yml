@@ -1,0 +1,23 @@
+generated: '2026-08-17'
+method: searched
+source: https://vitesseautomation.com/sitemap.xml
+limit_count: 0
+headers_documented: []
+exhaustion_status: null
+note: >-
+  No rate limits are documented, because Vitesse publishes no developer documentation to
+  document them in. There is no developer portal, API reference, or docs host on any Vitesse
+  property (/docs, /developers, /developer, /api all return a hard 404, and
+  docs./developer./api. subdomains do not resolve on either vitesseautomation.com or
+  vitesse.dev). The product backends found in the application bundle
+  (fleet.vitesse.dev, conversations.vitesse.dev) return no rate-limit headers on an
+  unauthenticated request — fleet answers a plain JSON 404 and conversations answers a blanket
+  JSON 401 with no RateLimit-*, X-RateLimit-* or Retry-After header on either. limit_count is 0
+  as a measured absence, not an unchecked field.
+evidence:
+  - {url: 'https://vitesseautomation.com/docs', status: 404}
+  - {url: 'https://vitesseautomation.com/developers', status: 404}
+  - {url: 'https://vitesseautomation.com/api', status: 404}
+  - {url: 'https://fleet.vitesse.dev/', status: 200, note: 'no rate-limit response headers'}
+  - {url: 'https://conversations.vitesse.dev/', status: 200, note: 'no rate-limit response headers'}
+rate_limits: []

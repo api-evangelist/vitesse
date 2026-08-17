@@ -1,0 +1,22 @@
+generated: '2026-08-17'
+method: searched
+source: https://vitesseautomation.com/sitemap.xml
+plan_count: 0
+currency: null
+pricing_model: undisclosed
+self_serve: false
+note: >-
+  Vitesse publishes no pricing or plans page of any kind. The sitemap enumerates exactly eight
+  URLs (/, /hardware, /interoperability, /physical-ai, /data, /cybersecurity, /about, /videos)
+  and none is a pricing page; /pricing and /plans both return a hard 404. There is no published
+  tier, quota, overage, or list price, and no self-serve purchase path — the only conversion
+  surface on the site is a contact form at /contact, so commercial terms are established in a
+  direct sales conversation. This is a recorded absence, not an unchecked field: plan_count is 0
+  because the provider discloses nothing, which is the expected posture for an enterprise
+  industrial-automation platform sold with hardware controllers and on-site commissioning.
+evidence:
+  - {url: 'https://vitesseautomation.com/pricing', status: 404}
+  - {url: 'https://vitesseautomation.com/plans', status: 404}
+  - {url: 'https://vitesseautomation.com/sitemap.xml', status: 200, note: '8 URLs, no pricing page'}
+  - {url: 'https://vitesseautomation.com/contact', status: 200, note: 'contact form is the only commercial entry point'}
+plans: []

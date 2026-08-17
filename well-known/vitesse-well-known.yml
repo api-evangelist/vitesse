@@ -1,0 +1,209 @@
+generated: '2026-08-17'
+method: probed
+source: live HTTP probes of every Vitesse host reachable from apis.yml, the sitemap, and the app bundle
+summary:
+  hosts_probed: 5
+  well_known_documents_found: 0
+  other_documents_found: 1     # /robots.txt (Content-Signal directives)
+  pointer_emitted: false       # no /.well-known/* path returned a real document
+note: >-
+  No Vitesse host serves any /.well-known/ discovery document. Per the enrichment contract this
+  index is written to record the ABSENCE with evidence, and NO type:WellKnown / type:SecurityTxt
+  pointer is wired, because a pointer would assert the provider serves a surface it does not.
+  Every host below was probed with a nonsense negative-control path on the same host. Not one host
+  discriminated: each returned the identical status for the control as for the real paths, so no
+  document and no gated surface is provably present anywhere.
+
+# ---------------------------------------------------------------------------
+# The false positive this file exists to kill.
+# app.vitesse.dev answers HTTP 200 text/html for EVERY path, including
+# /zzz-kin-negative-control. Its 200s are the React SPA shell (<!DOCTYPE html>,
+# <title>Vitesse</title>), not documents. A naive presence check would have
+# credited Vitesse with security.txt, openid-configuration, api-catalog,
+# ai-plugin.json AND an A2A agent card on the strength of these 200s. All are
+# misses. Nothing was saved from this host and no pointer was emitted.
+# ---------------------------------------------------------------------------
+
+hosts:
+  - host: https://vitesseautomation.com
+    role: marketing website (Cloudflare)
+    discriminates: true          # hard 404, zero-length body, distinct from a real page
+    negative_control: {path: /zzz-kin-negative-control, status: 404}
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/oauth-protected-resource, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+    other_documents:
+      - path: /robots.txt
+        status: 200
+        content_type: text/plain
+        file: vitesse-robots.txt
+        kind: content-signal
+        note: >-
+          Real served document. Carries Cloudflare-managed Content-Signal directives
+          (search=yes, ai-train=no, use=reference) and an explicit Disallow for ClaudeBot,
+          GPTBot, CCBot, Bytespider, Amazonbot, Google-Extended, Applebot-Extended and
+          meta-externalagent. This is the only machine-readable consent/policy document
+          Vitesse publishes on any host.
+      - {path: /sitemap.xml, status: 200, content_type: application/xml, urls: 8, note: "Lists only the 8 marketing pages; no docs, API, pricing, or blog URL."}
+
+  - host: https://vitesse.dev
+    role: apex of the product domain
+    discriminates: true
+    negative_control: {path: /zzz-kin-negative-control, status: 404}
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/oauth-protected-resource, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+
+  - host: https://app.vitesse.dev
+    role: login-gated product application (React SPA, Clerk identity)
+    discriminates: false
+    negative_control: {path: /zzz-kin-negative-control, status: 200, content_type: 'text/html; charset=utf-8'}
+    all_paths_status: 200
+    verdict: catch-all-spa-shell
+    note: >-
+      REJECTED WHOLESALE. Every path returns the same SPA shell with HTTP 200 and
+      Content-Type text/html, including the negative control. No path here is a document.
+    documents:
+      - {path: /.well-known/security.txt, status: 200, content_type: 'text/html; charset=utf-8', document: false}
+      - {path: /.well-known/openid-configuration, status: 200, content_type: 'text/html; charset=utf-8', document: false}
+      - {path: /.well-known/oauth-authorization-server, status: 200, content_type: 'text/html; charset=utf-8', document: false}
+      - {path: /.well-known/oauth-protected-resource, status: 200, content_type: 'text/html; charset=utf-8', document: false}
+      - {path: /.well-known/api-catalog, status: 200, content_type: 'text/html; charset=utf-8', document: false}
+      - {path: /.well-known/ai-plugin.json, status: 200, content_type: 'text/html; charset=utf-8', document: false}
+      - {path: /.well-known/agent-card.json, status: 200, content_type: 'text/html; charset=utf-8', document: false}
+      - {path: /.well-known/agent.json, status: 200, content_type: 'text/html; charset=utf-8', document: false}
+
+  - host: https://fleet.vitesse.dev
+    role: product backend service (JSON API router)
+    discovered_via: https://app.vitesse.dev/assets/index-C03MFmuS.js
+    discriminates: false
+    negative_control: {path: /zzz-kin-negative-control, status: 404, content_type: application/json}
+    note: >-
+      A genuine JSON API host — it answers {"error":"Not found"} with Content-Type
+      application/json rather than an HTML shell — but it publishes no discovery document
+      and no specification at any conventional path. It is the application's own backend,
+      not a documented developer API.
+    documents:
+      - {path: /.well-known/security.txt, status: 404}
+      - {path: /.well-known/openid-configuration, status: 404}
+      - {path: /.well-known/oauth-authorization-server, status: 404}
+      - {path: /.well-known/oauth-protected-resource, status: 404}
+      - {path: /.well-known/api-catalog, status: 404}
+      - {path: /.well-known/ai-plugin.json, status: 404}
+      - {path: /.well-known/agent-card.json, status: 404}
+      - {path: /.well-known/agent.json, status: 404}
+
+  - host: https://conversations.vitesse.dev
+    role: product backend service (blanket-authenticated)
+    discovered_via: https://app.vitesse.dev/assets/index-C03MFmuS.js
+    discriminates: false
+    negative_control: {path: /zzz-kin-negative-control, status: 401, content_type: application/json}
+    all_paths_status: 401
+    verdict: non-discriminating-auth-wall
+    note: >-
+      Returns 401 {"error":"Unauthorized"} for EVERY path, including the negative control.
+      Per pipeline-enrich.md, a 401 proves a specific surface exists only where a nonsense
+      path on the same host answers differently. It does not here, so this host is recorded
+      as a blanket auth wall and NOT as a gated API surface.
+    documents:
+      - {path: /.well-known/security.txt, status: 401}
+      - {path: /.well-known/openid-configuration, status: 401}
+      - {path: /.well-known/oauth-authorization-server, status: 401}
+      - {path: /.well-known/oauth-protected-resource, status: 401}
+      - {path: /.well-known/api-catalog, status: 401}
+      - {path: /.well-known/ai-plugin.json, status: 401}
+      - {path: /.well-known/agent-card.json, status: 401}
+      - {path: /.well-known/agent.json, status: 401}
+
+# ---------------------------------------------------------------------------
+# STEP 0b contract discovery — the full record, so a later round does not
+# repeat it and does not wrongly conclude "not checked".
+# ---------------------------------------------------------------------------
+contract_discovery:
+  openapi:
+    found: false
+    probed:
+      - {url: 'https://vitesseautomation.com/openapi.json', status: 404}
+      - {url: 'https://vitesseautomation.com/openapi.yaml', status: 404}
+      - {url: 'https://vitesseautomation.com/swagger.json', status: 404}
+      - {url: 'https://vitesseautomation.com/v1/openapi.json', status: 404}
+      - {url: 'https://vitesseautomation.com/api-docs', status: 404}
+      - {url: 'https://vitesseautomation.com/docs', status: 404}
+      - {url: 'https://vitesse.dev/openapi.json', status: 404}
+      - {url: 'https://vitesse.dev/api/openapi.json', status: 404}
+      - {url: 'https://fleet.vitesse.dev/openapi.json', status: 404}
+      - {url: 'https://fleet.vitesse.dev/openapi.yaml', status: 404}
+      - {url: 'https://fleet.vitesse.dev/swagger.json', status: 404}
+      - {url: 'https://fleet.vitesse.dev/v1/openapi.json', status: 404}
+      - {url: 'https://fleet.vitesse.dev/docs', status: 404}
+      - {url: 'https://fleet.vitesse.dev/redoc', status: 404}
+      - {url: 'https://conversations.vitesse.dev/openapi.json', status: 401}
+      - {url: 'https://app.vitesse.dev/openapi.json', status: 200, document: false, note: SPA shell}
+  graphql:
+    found: false
+    probed:
+      - {url: 'https://app.vitesse.dev/graphql', status: 405, note: static host rejects POST}
+      - {url: 'https://app.vitesse.dev/api/graphql', status: 405}
+      - {url: 'https://vitesse.dev/graphql', status: 404}
+  mcp:
+    found: false
+    probed:
+      - {url: 'https://app.vitesse.dev/mcp', status: 405, note: 'POST tools/list rejected; static host'}
+      - {url: 'https://app.vitesse.dev/api/mcp', status: 405}
+      - {url: 'https://vitesse.dev/mcp', status: 404}
+      - {url: 'https://vitesseautomation.com/mcp', status: 404}
+  asyncapi:
+    found: false
+    note: No event, streaming, or webhook surface is documented on any Vitesse property.
+  agent_card:
+    found: false
+    note: >-
+      Probed /.well-known/agent-card.json and the legacy /.well-known/agent.json on all five
+      hosts. Only app.vitesse.dev returned 200, and its body is the SPA shell, which the
+      contract requires be rejected. Nothing written to a2a/ — correct per the search-only rule.
+
+# ---------------------------------------------------------------------------
+# Hosts that do not resolve or do not negotiate TLS.
+# ---------------------------------------------------------------------------
+absent_hosts:
+  - {host: api.vitesseautomation.com, dns: NXDOMAIN}
+  - {host: docs.vitesseautomation.com, dns: NXDOMAIN}
+  - {host: developer.vitesseautomation.com, dns: NXDOMAIN}
+  - {host: status.vitesseautomation.com, dns: NXDOMAIN}
+  - {host: api.vitesse.dev, dns: NXDOMAIN}
+  - {host: docs.vitesse.dev, dns: NXDOMAIN}
+  - host: fullspeedautomation.com
+    dns: resolves (Webflow proxy)
+    status: 0
+    error: TLS handshake failure (tlsv1 alert internal error)
+    note: >-
+      Legacy pre-rebrand brand domain. Full Speed Automation renamed to Vitesse Automation
+      after acquiring Niagara Tech; the old Webflow site no longer completes a TLS handshake
+      on either the apex or www, so nothing is harvestable from it.
+
+# ---------------------------------------------------------------------------
+# Excluded — a real API that belongs to a DIFFERENT company (STEP 0c).
+# ---------------------------------------------------------------------------
+excluded_contracts:
+  - name: Vitesse PSP
+    docs: https://docs.vitessepsp.com/
+    domain: vitessepsp.com
+    status: 200
+    reason: >-
+      NOT THIS COMPANY. A web search for "Vitesse API" surfaces Vitesse PSP, a cross-border
+      payments service provider on the unrelated domain vitessepsp.com, which does publish
+      developer documentation. Vitesse Automation (vitesseautomation.com) is an industrial
+      OT/physical-AI platform. Shared brand word only — no corporate relationship. This
+      contract must never be harvested into all/vitesse/.
