@@ -67,6 +67,10 @@ maintainers:
 - FN: APIs.json
   email: info@apis.io
 common:
+- type: Plans
+  url: plans/vitesse-plans-pricing.yml
+- type: RateLimits
+  url: rate-limits/vitesse-rate-limits.yml
 - type: Website
   url: https://vitesseautomation.com
 - type: SignUp
